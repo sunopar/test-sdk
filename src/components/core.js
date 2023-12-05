@@ -7,6 +7,7 @@ export function Client() {
   const [client, setClient] = useState(null);
   const [accounts, setAccounts] = useState([]);
   const [chainId, setChainId] = useState("0x0");
+  const [sign, setSign] = useState("");
 
   const connect = useCallback(async () => {
     const client = new Core();
@@ -42,6 +43,7 @@ export function Client() {
           error.message
         );
       });
+    setSign(rs);
     console.log("🚀 ~~ file: client.tsx:45 ~~ personalSign ~~ rs:", rs);
   }, [client, accounts]);
 
@@ -120,6 +122,12 @@ export function Client() {
           <button onClick={openDeeplink}>open deep link</button>
         </section>
         {accounts}
+        {sign && (
+          <div>
+            <h4>Sign Message Success</h4>
+            <p style={{ width: "600px", wordWrap: "break-word" }}>{sign}</p>
+          </div>
+        )}
       </main>
     </>
   );
