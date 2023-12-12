@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@binance/w3w-core": "^1.0.1-alpha.2",
-    "@binance/w3w-ethereum-provider": "^1.0.1-alpha.2",
-    "@binance/w3w-wagmi-connector": "^1.0.1-alpha.3",
+    "@binance/w3w-core": "^1.0.1",
+    "@binance/w3w-ethereum-provider": "^1.0.1",
+    "@binance/w3w-wagmi-connector": "^1.0.1",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
