@@ -12,6 +12,7 @@ import {
   useNetwork,
   useSwitchNetwork,
   useSendTransaction,
+  useContractWrite
 } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { bsc, mainnet } from "wagmi/chains";
