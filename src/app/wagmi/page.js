@@ -66,6 +66,8 @@ function Home() {
   const { data, signMessage } = useSignMessage({
     message: "hello world",
   });
+  const usdtAddress = '0x0000000000000000000100000000000000000002'
+
   const { write } = useContractWrite({
     address: usdtAddress,
     abi: abi,
