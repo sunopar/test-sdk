@@ -6,7 +6,7 @@ import Head from "next/head";
 
 import { useState } from "react";
 
-const provider = getProvider({ chainId: 5 });
+let provider = getProvider({ chainId: 56 });
 
 const disconnect = async () => {
   await provider.disconnect();
@@ -16,7 +16,8 @@ export default function Home() {
   const [account, setAccount] = useState("");
   const [chainId, setChainId] = useState("0");
 
-  const enable = async () => {
+  const enable = async (chainId = 56) => {
+    provider = getProvider({ chainId });
     provider?.setLng("zh-CN");
     const accounts = await provider.enable();
     console.log("🚀 ~ enable accounts:", accounts);
@@ -98,7 +99,8 @@ export default function Home() {
       >
         <section>
           <h2>ethereum-provider</h2>
-          <button onClick={enable}>enable</button>
+          <button onClick={() => enable()}>enable</button>
+          <button onClick={() => enable(373)}>enable Acala EVM</button>
           <button onClick={disconnect}>disconnect</button>
           <button onClick={getAccount}>getAccount</button>
           <button onClick={signMessage}>signMessage</button>
