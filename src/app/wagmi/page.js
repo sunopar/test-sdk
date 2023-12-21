@@ -17,6 +17,7 @@ import {
 import { publicProvider } from "wagmi/providers/public";
 import { bsc, mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
+import abi from './abi.json'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [bsc, mainnet],
