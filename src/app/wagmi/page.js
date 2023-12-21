@@ -14,6 +14,8 @@ import {
   useSendTransaction,
   useContractWrite
 } from "wagmi";
+import { parseGwei } from 'viem'
+
 import { publicProvider } from "wagmi/providers/public";
 import { bsc, mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
@@ -104,7 +106,9 @@ function Home() {
 
   return (
     <>
-      <main>
+      <main style={{
+        height: '100vh'
+      }}>
         <section>
           <h2>wagmi connector</h2>
           <button onClick={enable}>enable</button>
