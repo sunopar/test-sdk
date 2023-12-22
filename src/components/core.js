@@ -54,7 +54,7 @@ export function Client() {
       from: accounts[0],
       to: accounts[0],
       value: "0x1",
-      data: "0x00",
+      data: "0x",
     };
     const res = await client.request({
       method: "eth_sendTransaction",
