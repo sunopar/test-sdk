@@ -100,7 +100,7 @@ export default function Home() {
         <section>
           <h2>ethereum-provider</h2>
           <button onClick={() => enable()}>enable</button>
-          <button onClick={() => enable(373)}>enable Acala EVM</button>
+          <button onClick={() => enable(787)}>enable Acala EVM</button>
           <button onClick={disconnect}>disconnect</button>
           <button onClick={getAccount}>getAccount</button>
           <button onClick={signMessage}>signMessage</button>
