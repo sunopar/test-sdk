@@ -53,7 +53,7 @@ export default function Home() {
   const changeChainId = () => {
     provider?.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0xe708" }],
+      params: [{ chainId: "0x26fc" }],
     });
   };
   useEffect(() => {
