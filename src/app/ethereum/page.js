@@ -53,7 +53,7 @@ export default function Home() {
   const changeChainId = () => {
     provider?.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x38" }],
+      params: [{ chainId: "0xe708" }],
     });
   };
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function Home() {
       params: [
         {
           data: '0x14d9e096000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000aadf86a2cc193be699980e7c063ca90bbb487f35',
-          from: '0xaadf86a2cc193be699980e7c063ca90bbb487f35',
+          from: account,
           gas: '0x19023',
           to: '0x39454a5ad76c379ec1a5281cd93e301fed3995a4', //出错的opbnb合约地址
           // to: bridgeAddr[+chainId],
