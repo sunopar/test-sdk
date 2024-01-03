@@ -24,11 +24,18 @@ init({
   wallets: [injected, binance],
   chains: [
     {
+      id: "0xcc",
+      token: "opBNB",
+      label: "opBNB Mainnet",
+      rpcUrl,
+    },
+    {
       id: "0x1",
       token: "ETH",
       label: "Ethereum Mainnet",
       rpcUrl,
     },
+
     {
       id: "0x38",
       token: "BNB",
@@ -102,20 +109,40 @@ function App() {
       }
     }
   };
+  const account = wallet?.accounts?.[0]?.address;
+  console.log("🚀 ~~ App ~~ account:", account);
+
+  const opSendTransaction = async () => {
+    console.log(provider.getSigner());
+    const res = await provider.send("eth_sendTransaction", [
+      {
+        data: "0x14d9e096000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000aadf86a2cc193be699980e7c063ca90bbb487f35",
+        from: account,
+        gas: "0x19023",
+        to: "0x39454a5ad76c379ec1a5281cd93e301fed3995a4", //出错的opbnb合约地址
+        // to: bridgeAddr[+chainId],
+        value: "0xffcffbee1f800",
+      },
+    ]);
+    console.log("🚀 ~~ opSendTransaction ~~ res:", res);
+  };
 
   return (
-    <main style={{height: '100vh'}}>
+    <main style={{ height: "100vh" }}>
       <button
         disabled={connecting}
         onClick={() => (wallet ? disconnect(wallet) : connect())}
       >
         {connecting ? "connecting" : wallet ? "disconnect" : "connect"}
       </button>
-      <button onClick={() => setChain({ chainId: "0x38" })}>
+      <button onClick={() => setChain({ chainId: "0xcc" })}>
         changeChainId
       </button>
       <button onClick={signMessage}>sign message</button>
       <button onClick={sendTransaction}>sendTransaction</button>
+      <button onClick={opSendTransaction}>opSendTransaction</button>
+
+      <div>address: {account}</div>
     </main>
   );
 }
