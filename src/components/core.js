@@ -113,7 +113,8 @@ export function Client() {
           error.message
         );
       });
-  }
+    setSign(rs);
+  };
 
   const ethSignTypeData_v4 = async () => {
     // eth_signTypedData_v4 parameters. All of these parameters affect the resulting signature.
@@ -204,6 +205,7 @@ export function Client() {
           error.message
         );
       });
+    setSign(rs);
   };
   const ethSign = async () => {
     if (!client) return;
