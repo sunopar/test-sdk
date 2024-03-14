@@ -25,6 +25,95 @@ export function Client() {
       );
     }
   }, []);
+  const ethSignTypeData = async () => {
+    const msgParams = JSON.stringify({
+      domain: {
+        // This defines the network, in this case, Mainnet.
+        chainId: 1,
+        // Give a user-friendly name to the specific contract you're signing for.
+        name: "Ether Mail",
+        // Add a verifying contract to make sure you're establishing contracts with the proper entity.
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        // This identifies the latest version.
+        version: "1",
+      },
+
+      // This defines the message you're proposing the user to sign, is dapp-specific, and contains
+      // anything you want. There are no required fields. Be as explicit as possible when building out
+      // the message schema.
+      message: {
+        contents: "Hello, Bob!",
+        attachedMoneyInEth: 4.2,
+        from: {
+          name: "Cow",
+          wallets: [
+            "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+            "0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF",
+          ],
+        },
+        to: [
+          {
+            name: "Bob",
+            wallets: [
+              "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+              "0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57",
+              "0xB0B0b0b0b0b0B000000000000000000000000000",
+            ],
+          },
+        ],
+      },
+      // This refers to the keys of the following types object.
+      primaryType: "Mail",
+      types: {
+        // This refers to the domain the contract is hosted on.
+        EIP712Domain: [
+          { name: "name", type: "string" },
+          { name: "version", type: "string" },
+          { name: "chainId", type: "uint256" },
+          { name: "verifyingContract", type: "address" },
+        ],
+        // Not an EIP712Domain definition.
+        Group: [
+          { name: "name", type: "string" },
+          { name: "members", type: "Person[]" },
+        ],
+        // Refer to primaryType.
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person[]" },
+          { name: "contents", type: "string" },
+        ],
+        // Not an EIP712Domain definition.
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallets", type: "address[]" },
+        ],
+      },
+    });
+
+    const params = [accounts[0], msgParams];
+
+    console.log(
+      JSON.stringify({
+        method: "eth_signTypedData",
+        params: params,
+        from: accounts[0],
+      })
+    );
+    const rs = await client
+      .request({
+        method: "eth_signTypedData",
+        params: params,
+        from: accounts[0],
+      })
+      .catch((error) => {
+        console.log(
+          "🚀 ~ file: client.tsx ~ ethSignTypedData ~ error:",
+          error.code,
+          error.message
+        );
+      });
+  }
 
   const ethSignTypeData_v4 = async () => {
     // eth_signTypedData_v4 parameters. All of these parameters affect the resulting signature.
@@ -229,6 +318,7 @@ export function Client() {
           <button onClick={personalSign}>personal_sign</button>
           {/* <button onClick={ethSign}>ethSign</button> */}
           <button onClick={ethSignTypeData_v4}>ethSignTypeData_v4</button>
+          <button onClick={ethSignTypeData}>ethSignTypeData</button>
           <button onClick={sendTransaction}>eth_sendtransaction</button>
           <button onClick={changeChainId}>changeChainId</button>
           <button onClick={openDeeplink}>open deep link</button>
