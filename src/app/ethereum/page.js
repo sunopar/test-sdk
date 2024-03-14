@@ -15,6 +15,7 @@ const disconnect = async () => {
 export default function Home() {
   const [account, setAccount] = useState("");
   const [chainId, setChainId] = useState("0");
+  const [cCHangId, setCCHangId] = useState("0xe708");
 
   const enable = async (chainId = 56) => {
     provider = getProvider({ chainId });
@@ -53,7 +54,7 @@ export default function Home() {
   const changeChainId = () => {
     provider?.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0xe708" }],
+      params: [{ chainId: cCHangId }],
     });
   };
   useEffect(() => {
@@ -86,20 +87,20 @@ export default function Home() {
   };
   const opSendTransaction = async () => {
     const res = await provider.request({
-      method: 'eth_sendTransaction',
+      method: "eth_sendTransaction",
       params: [
         {
-          data: '0x14d9e096000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000aadf86a2cc193be699980e7c063ca90bbb487f35',
+          data: "0x14d9e096000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000aadf86a2cc193be699980e7c063ca90bbb487f35",
           from: account,
-          gas: '0x19023',
-          to: '0x39454a5ad76c379ec1a5281cd93e301fed3995a4', //出错的opbnb合约地址
+          gas: "0x19023",
+          to: "0x39454a5ad76c379ec1a5281cd93e301fed3995a4", //出错的opbnb合约地址
           // to: bridgeAddr[+chainId],
-          value: '0xffcffbee1f800',
+          value: "0xffcffbee1f800",
         },
       ],
-    })
-    console.log("🚀 ~~ opSendTransaction ~~ res:", res)
-  }
+    });
+    console.log("🚀 ~~ opSendTransaction ~~ res:", res);
+  };
 
   return (
     <>
@@ -126,6 +127,12 @@ export default function Home() {
           <button onClick={opSendTransaction}>opSendTransaction</button>
           <button onClick={sendTransaction}>sendTransaction</button>
         </section>
+        <div>
+          <input
+            value={cCHangId}
+            onChange={(e) => setCCHangId(e.target.value)}
+          />
+        </div>
         <div>account: {account}</div>
         <div>chainId: {chainId}</div>
       </main>
