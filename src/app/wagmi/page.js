@@ -21,6 +21,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { bsc, mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
 import abi from "./abi.json";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [bsc, mainnet],
@@ -42,6 +43,7 @@ const config = createConfig({
   autoConnect: true,
   publicClient,
   webSocketPublicClient,
+  connectors: [connector, new InjectedConnector({ chains })],
 });
 
 export default function App() {
@@ -56,12 +58,14 @@ function Home() {
   const { address, isConnected, connector: activateConnector } = useAccount();
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
-  const bal = useBalance();
-  console.log("🚀 ~~ Home ~~ bal:", bal.value);
+  const bal = useBalance({
+    address: "0xdD99011b53a914FA0832D7ea3D90e43D8835868E",
+  });
+  console.log("🚀 ~~ Home ~~ bal:", bal.data);
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork();
-  const { connect } = useConnect({
-    connector: connector,
+  const { connect, connectors } = useConnect({
+    // connector: connector,
     onSuccess: () => {
       console.log("🚀 ~ onSuccess");
     },
@@ -115,7 +119,18 @@ function Home() {
       >
         <section>
           <h2>wagmi connector</h2>
-          <button onClick={enable}>enable</button>
+          {connectors.map((connector) => (
+            <button
+              disabled={!connector.ready}
+              key={connector.id}
+              onClick={() => connect({ connector })}
+            >
+              {connector.name}
+              {isLoading &&
+                pendingConnector?.id === connector.id &&
+                " (connecting)"}
+            </button>
+          ))}
           <button onClick={() => disconnect()}>disconnect</button>
           <button onClick={() => signMessage()}>signMessage</button>
           <button onClick={() => getChainId()}>getChainId</button>
