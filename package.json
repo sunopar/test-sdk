@@ -12,7 +12,8 @@
     "@binance/w3w-blocknative-connector": "^1.1.0",
     "@binance/w3w-core": "^1.1.0",
     "@binance/w3w-ethereum-provider": "^1.1.0",
-    "@binance/w3w-wagmi-connector": "^1.1.0",
+    "@binance/w3w-wagmi-connector-v2": "^1.2.3",
+    "@tanstack/react-query": "^5.50.1",
     "@web3-onboard/injected-wallets": "^2.10.10",
     "@web3-onboard/react": "^2.8.13",
     "@web3-onboard/trust": "^2.0.4",
@@ -20,7 +21,7 @@
     "next": "13.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "viem": "^1.20.3",
-    "wagmi": "^1.4.8"
+    "viem": "^2.17.3",
+    "wagmi": "^2.10.9"
   }
 }

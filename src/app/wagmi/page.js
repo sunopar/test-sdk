@@ -1,170 +1,32 @@
-"use client";
-import { getWagmiConnector } from "@binance/w3w-wagmi-connector";
+'use client'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { http, createConfig, WagmiProvider } from "wagmi";
+import { injected } from "wagmi/connectors";
+import { getWagmiConnectorV2 } from "@binance/w3w-wagmi-connector-v2";
+import { bsc, mainnet, sepolia } from "wagmi/chains";
+import { Home } from "./view";
 
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useSignMessage,
-  WagmiConfig,
-  configureChains,
-  createConfig,
-  useNetwork,
-  useSwitchNetwork,
-  useSendTransaction,
-  useContractWrite,
-  useBalance,
-} from "wagmi";
-import { parseGwei } from "viem";
-
-import { publicProvider } from "wagmi/providers/public";
-import { bsc, mainnet } from "wagmi/chains";
-import { useEffect, useState } from "react";
-import abi from "./abi.json";
-import { InjectedConnector } from "wagmi/connectors/injected";
-
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [bsc, mainnet],
-  [publicProvider()]
-);
-
-const Connector = getWagmiConnector();
-
-const connector = new Connector({
-  chains,
-  options: {
-    chainId: 56,
-    rpc: { 56: "https://bsc-dataseed.binance.org/" },
-    lng: "zh-CN",
-  },
-});
+const connector = getWagmiConnectorV2();
 
 const config = createConfig({
-  autoConnect: true,
-  publicClient,
-  webSocketPublicClient,
-  connectors: [connector, new InjectedConnector({ chains })],
+  chains: [mainnet, sepolia, bsc],
+  connectors: [injected(), connector()],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+    // [bsc.id]: http(),
+  },
 });
+const queryClient = new QueryClient();
 
-export default function App() {
+function WagmiV2() {
   return (
-    <WagmiConfig config={config}>
-      <Home />
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <Home />
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 
-function Home() {
-  const { address, isConnected, connector: activateConnector } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { chain } = useNetwork();
-  const bal = useBalance({
-    address: "0xdD99011b53a914FA0832D7ea3D90e43D8835868E",
-  });
-  console.log("🚀 ~~ Home ~~ bal:", bal.data);
-  const { chains, error, isLoading, pendingChainId, switchNetwork } =
-    useSwitchNetwork();
-  const { connect, connectors } = useConnect({
-    // connector: connector,
-    onSuccess: () => {
-      console.log("🚀 ~ onSuccess");
-    },
-    onError(e) {
-      console.log(e.toString());
-    },
-  });
-  const { data, signMessage } = useSignMessage({
-    message: "hello world",
-  });
-  const usdtAddress = "0x0000000000000000000100000000000000000002";
-
-  const { write } = useContractWrite({
-    address: usdtAddress,
-    abi: abi,
-    functionName: "approve",
-    // gas: 50000000n,
-
-    maxFeePerGas: parseGwei("35"),
-
-    args: ["0x0000000000000000000100000000000000000002", "0x1"],
-  });
-
-  async function enable() {
-    await connect();
-    console.log("🚀 ~ enable");
-  }
-  const getChainId = async () => {
-    const chainId = await activateConnector?.getChainId();
-
-    alert(chainId);
-  };
-
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const { isSuccess, sendTransaction } = useSendTransaction({
-    to: address,
-    value: BigInt(1),
-  });
-
-  return (
-    <>
-      <main
-        style={{
-          height: "100vh",
-        }}
-      >
-        <section>
-          <h2>wagmi connector</h2>
-          {connectors.map((connector) => (
-            <button
-              disabled={!connector.ready}
-              key={connector.id}
-              onClick={() => connect({ connector })}
-            >
-              {connector.name}
-              {isLoading &&
-                pendingConnector?.id === connector.id &&
-                " (connecting)"}
-            </button>
-          ))}
-          <button onClick={() => disconnect()}>disconnect</button>
-          <button onClick={() => signMessage()}>signMessage</button>
-          <button onClick={() => getChainId()}>getChainId</button>
-          <button onClick={() => sendTransaction()}>sendTransaction</button>
-          <button onClick={() => write()}>approve</button>
-          <div>
-            {isClient &&
-              chains.map((x) => (
-                <button
-                  disabled={!switchNetwork || x.id === chain?.id}
-                  key={x.id}
-                  onClick={() => switchNetwork?.(x.id)}
-                >
-                  {x.name}
-                  {isLoading && pendingChainId === x.id && " (switching)"}
-                </button>
-              ))}
-          </div>
-        </section>
-
-        {isConnected && (
-          <section>
-            <h2>Account</h2>
-            <p>{address}</p>
-          </section>
-        )}
-        <div>chainId: {chain?.id}</div>
-        {data && (
-          <section>
-            <h4>Sign Message Success</h4>
-            <p style={{ width: "600px", wordWrap: "break-word" }}>{data}</p>
-          </section>
-        )}
-      </main>
-    </>
-  );
-}
+export default WagmiV2
