@@ -57,7 +57,7 @@ function Home() {
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
   const bal = useBalance();
-  console.log("🚀 ~~ Home ~~ bal:", bal);
+  console.log("🚀 ~~ Home ~~ bal:", bal.value);
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork();
   const { connect } = useConnect({
