@@ -12,14 +12,15 @@ import {
   useNetwork,
   useSwitchNetwork,
   useSendTransaction,
-  useContractWrite
+  useContractWrite,
+  useBalance,
 } from "wagmi";
-import { parseGwei } from 'viem'
+import { parseGwei } from "viem";
 
 import { publicProvider } from "wagmi/providers/public";
 import { bsc, mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
-import abi from './abi.json'
+import abi from "./abi.json";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [bsc, mainnet],
@@ -55,6 +56,8 @@ function Home() {
   const { address, isConnected, connector: activateConnector } = useAccount();
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork();
+  const bal = useBalance();
+  console.log("🚀 ~~ Home ~~ bal:", bal);
   const { chains, error, isLoading, pendingChainId, switchNetwork } =
     useSwitchNetwork();
   const { connect } = useConnect({
@@ -69,7 +72,7 @@ function Home() {
   const { data, signMessage } = useSignMessage({
     message: "hello world",
   });
-  const usdtAddress = '0x0000000000000000000100000000000000000002'
+  const usdtAddress = "0x0000000000000000000100000000000000000002";
 
   const { write } = useContractWrite({
     address: usdtAddress,
@@ -80,7 +83,6 @@ function Home() {
     maxFeePerGas: parseGwei("35"),
 
     args: ["0x0000000000000000000100000000000000000002", "0x1"],
-    
   });
 
   async function enable() {
@@ -106,9 +108,11 @@ function Home() {
 
   return (
     <>
-      <main style={{
-        height: '100vh'
-      }}>
+      <main
+        style={{
+          height: "100vh",
+        }}
+      >
         <section>
           <h2>wagmi connector</h2>
           <button onClick={enable}>enable</button>
