@@ -14,7 +14,7 @@ const config = createConfig({
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),
-    // [bsc.id]: http(),
+    [bsc.id]: http(),
   },
 });
 const queryClient = new QueryClient();
