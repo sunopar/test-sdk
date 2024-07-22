@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { custom } from "viem";
 import { getWagmiConnectorV2 } from "@binance/w3w-wagmi-connector-v2";
