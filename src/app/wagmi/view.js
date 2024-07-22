@@ -60,6 +60,10 @@ const Connect2 = () => {
   const { connectors, connect } = useConnect({ config: config2 });
   const { address } = useAccount({ config: config2 });
   const { signMessage, data } = useSignMessage({ config: config2 });
+  const { data: balance } = useBalance({
+    address: address,
+    config: config2,
+  });
 
   return (
     <div>
@@ -77,6 +81,7 @@ const Connect2 = () => {
         </button>
       </div>
       <div>address: {address}</div>
+      <div>balance:{balance?.value}</div>
     </div>
   );
 };
