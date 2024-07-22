@@ -36,12 +36,19 @@ function WalletOption({ connector, onClick }) {
 const connector = getWagmiConnectorV2();
 
 const transport = () => {
-  if (typeof window !== "undefined" && window.ethereum.isBinance) {
+  console.log("🚀 ~~ transport ~~ window.ethereum:", window.ethereum);
+  if (typeof window !== "undefined" && window.ethereum) {
+    console.log("~~ custom");
     return custom({
       async request({ method, params }) {
-        const response = await window.ethereum.request(method, params);
-        console.log("🚀 ~~ custom ~~ response:", response);
-        return response;
+        console.log("🚀 ~~ request ~~ method:", method);
+        try {
+          const response = await window.ethereum.request({ method, params });
+          console.log("🚀 ~~ custom ~~ response:", response);
+          return response;
+        } catch (error) {
+          console.log("🚀 ~~ request ~~ error:", error);
+        }
       },
     });
   }
@@ -53,7 +60,7 @@ const config2 = createConfig({
   transports: {
     [mainnet.id]: transport(),
     [sepolia.id]: http(),
-    [bsc.id]: http(),
+    [bsc.id]: transport(),
   },
 });
 
@@ -82,7 +89,7 @@ const Connect2 = () => {
         </button>
       </div>
       <div>address: {address}</div>
-      <div>balance:{balance?.value}</div>
+      <div>balance:{balance?.formatted}</div>
     </div>
   );
 };
