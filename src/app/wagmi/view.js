@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { bnTransport } from "@binance/w3w-utils";
 import { custom } from "viem";
 import { getWagmiConnectorV2 } from "@binance/w3w-wagmi-connector-v2";
 import { injected } from "wagmi/connectors";
@@ -35,31 +36,31 @@ function WalletOption({ connector, onClick }) {
 
 const connector = getWagmiConnectorV2();
 
-const transport = () => {
-  if (typeof window !== "undefined" && window.ethereum) {
-    console.log("~~ custom");
-    return custom({
-      async request({ method, params }) {
-        console.log("🚀 ~~ request ~~ method:", method);
-        try {
-          const response = await window.ethereum.request({ method, params });
-          console.log("🚀 ~~ custom ~~ response:", response);
-          return response;
-        } catch (error) {
-          console.log("🚀 ~~ request ~~ error:", error);
-        }
-      },
-    });
-  }
-  return http();
-};
+// const transport = () => {
+//   if (typeof window !== "undefined" && window.ethereum) {
+//     console.log("~~ custom");
+//     return custom({
+//       async request({ method, params }) {
+//         console.log("🚀 ~~ request ~~ method:", method);
+//         try {
+//           const response = await window.ethereum.request({ method, params });
+//           console.log("🚀 ~~ custom ~~ response:", response);
+//           return response;
+//         } catch (error) {
+//           console.log("🚀 ~~ request ~~ error:", error);
+//         }
+//       },
+//     });
+//   }
+//   return http();
+// };
 const config2 = createConfig({
   chains: [mainnet, sepolia, bsc],
   connectors: [injected(), connector()],
   transports: {
-    [mainnet.id]: transport(),
+    [mainnet.id]: bnTransport({ custom, http }),
     [sepolia.id]: http(),
-    [bsc.id]: transport(),
+    [bsc.id]: bnTransport({ custom, http }),
   },
 });
 

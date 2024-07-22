@@ -12,6 +12,7 @@
     "@binance/w3w-blocknative-connector": "^1.1.0",
     "@binance/w3w-core": "^1.1.0",
     "@binance/w3w-ethereum-provider": "^1.1.0",
+    "@binance/w3w-utils": "1.1.6-alpha.0",
     "@binance/w3w-wagmi-connector-v2": "^1.2.3",
     "@tanstack/react-query": "^5.50.1",
     "@web3-onboard/injected-wallets": "^2.10.10",
