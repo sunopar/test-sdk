@@ -1,4 +1,5 @@
 import React from "react";
+import { custom } from "viem";
 import { getWagmiConnectorV2 } from "@binance/w3w-wagmi-connector-v2";
 import { injected } from "wagmi/connectors";
 
@@ -33,11 +34,23 @@ function WalletOption({ connector, onClick }) {
 
 const connector = getWagmiConnectorV2();
 
+const transport = () => {
+  if (typeof window !== "undefined" && window.ethereum.isBinance) {
+    return custom({
+      async request({ method, params }) {
+        const response = await window.ethereum.request(method, params);
+        console.log("🚀 ~~ custom ~~ response:", response);
+        return response;
+      },
+    });
+  }
+  return http();
+};
 const config2 = createConfig({
   chains: [mainnet, sepolia, bsc],
   connectors: [injected(), connector()],
   transports: {
-    [mainnet.id]: http(),
+    [mainnet.id]: transport(),
     [sepolia.id]: http(),
     [bsc.id]: http(),
   },
@@ -59,7 +72,9 @@ const Connect2 = () => {
         />
       ))}
       <div>
-        <button onClick={() => signMessage({message: 'world'})}>signMessage</button>
+        <button onClick={() => signMessage({ message: "world" })}>
+          signMessage
+        </button>
       </div>
       <div>address: {address}</div>
     </div>
