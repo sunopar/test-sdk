@@ -36,7 +36,6 @@ function WalletOption({ connector, onClick }) {
 const connector = getWagmiConnectorV2();
 
 const transport = () => {
-  console.log("🚀 ~~ transport ~~ window.ethereum:", window.ethereum);
   if (typeof window !== "undefined" && window.ethereum) {
     console.log("~~ custom");
     return custom({
