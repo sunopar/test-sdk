@@ -10,7 +10,7 @@ const connector = getWagmiConnectorV2();
 
 const config = createConfig({
   chains: [mainnet, sepolia, bsc],
-  autoConnect: true,
+  autoConnect: false,
   connectors: [metaMask(), connector()],
   transports: {
     [mainnet.id]: http(),
