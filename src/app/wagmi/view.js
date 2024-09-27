@@ -95,6 +95,7 @@ const Connect2 = () => {
 };
 export function Home() {
   const { connectors, connect } = useConnect();
+  console.log("🚀 ~~ Home ~~ connectors:", connectors)
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const { signMessage, data } = useSignMessage();
